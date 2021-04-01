@@ -1,4 +1,4 @@
-package com.epam.first.repository;
+package com.epam.first.dao;
 
 import com.epam.first.entity.User;
 import com.epam.first.exception.DaoException;
@@ -27,9 +27,15 @@ public interface UserDao {
 
 //    boolean unblockUser(List<Long> usersId) throws DaoException;
 
-    boolean add(User user) throws DaoException;
+    boolean save(User user) throws DaoException;
 
     boolean deleteById(Long id) throws DaoException;
 
     Optional<User> authorize(String login, String password) throws DaoException;
+
+    boolean save(String email, String login, String encPassword) throws DaoException;
+
+    Optional<User> findByNameOrEmail(String login, String email) throws DaoException;
+
+    String checkByLogin(String login) throws DaoException;
 }

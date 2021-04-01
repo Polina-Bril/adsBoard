@@ -1,7 +1,7 @@
 package com.epam.first.command;
 
 import com.epam.first.command.impl.*;
-import com.epam.first.repository.impl.UserDaoImpl;
+import com.epam.first.dao.impl.UserDaoImpl;
 import com.epam.first.service.impl.UserServiceImpl;
 
 public enum CommandType {
@@ -28,6 +28,11 @@ public enum CommandType {
     LOGOUT {
         {
             this.command = new LogoutCommand(new UserServiceImpl((new UserDaoImpl())));
+        }
+    },
+    REGISTRY {
+        {
+            this.command = new RegisterUserCommand(new UserServiceImpl((new UserDaoImpl())));
         }
     };
     ActionCommand command;

@@ -23,6 +23,11 @@ public class User {
         this.phone = phone;
         this.averageRating = averageRating;
     }
+    public User(long userId, String username, String password) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+    }
 
      public long getUserId() {
         return userId;

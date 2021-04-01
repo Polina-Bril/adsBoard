@@ -16,4 +16,6 @@ public interface UserService {
     Optional<User> findUserByName(String name) throws ServiceException;
 
     void authorizeUser(String login, String password) throws ServiceException;
+
+    boolean createUser(String email, String login, String password) throws ServiceException;
 }
