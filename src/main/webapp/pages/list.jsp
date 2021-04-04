@@ -11,7 +11,7 @@
             <c:forEach var="elem" items="${list}" varStatus="status">
                 <tr>
                     <td><c:out value="${elem}"/>></td>
-                    <td><c:out value="${elem.id}"/>></td>
+                    <td><c:out value="${elem.userId}"/>></td>
                     <td><c:out value="${elem.username}"/>></td>
                     <td><c:out value="${elem.password}"/>></td>
                     <td><c:out value="${elem.email}"/>></td>

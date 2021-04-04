@@ -7,7 +7,7 @@
 <body>
 <form action="${pageContext.request.contextPath}/main-controller" method="post">
     <input type="hidden" name="command" value="sign_up">
-    <input type="text" id="email" name="email" placeholder="Электронная почта"/>" value="${email}"
+    <input type="text" id="email" name="email" placeholder="Электронная почта" value="${email}"
     required pattern="^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}">
     <c:if test="${errorEmailMessageInvalid}">
         <div class="alert alert-danger" role="alert">

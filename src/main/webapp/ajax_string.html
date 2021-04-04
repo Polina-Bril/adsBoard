@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SO question </title>
+</head>
+<body>
+<button id="somebutton1">press for string</button>
+<div id="somediv"></div>
+<script>
+    // Vanilla JS
+    document.querySelector('#somebutton1').addEventListener('click', () => {
+        fetch("ajax_servlet?button=1").then(res =>{
+            return res.text();
+        } ).then(data => {
+            document.querySelector('#somediv').innerHTML = data;
+        })
+    })
+</script>
+
+</body>
+</html>

@@ -21,7 +21,7 @@ public class ConnectionPool {
         private static final Logger logger = LogManager.getLogger();
         private static ConnectionPool instance;
         private static final Timer timerTask = new Timer();
-        static final int DEFAULT_POOL_SIZE = 32;
+        static final int DEFAULT_POOL_SIZE = 8;
         final BlockingQueue<ProxyConnection> freeConnection;
         private final Queue<ProxyConnection> givenAwayConnection;
         private static final AtomicBoolean isInitialized = new AtomicBoolean(false);

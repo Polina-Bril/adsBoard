@@ -1,6 +1,7 @@
 package com.epam.first.dao.impl;
 
 import com.epam.first.connection.ConnectionCreator;
+import com.epam.first.connection.ConnectionPool;
 import com.epam.first.entity.User;
 import com.epam.first.exception.DaoException;
 import com.epam.first.dao.UserDao;
@@ -17,17 +18,17 @@ import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
     static final Logger logger = LogManager.getLogger();
-    private static final String SQL_FIND_USER_BY_EMAIL = "SELECT userId, username, password, email, phone, averageRating FROM users WHERE email = ?";
-    private static final String SQL_FIND_USER_BY_USERNAME = "SELECT userId, username, password, email, phone, averageRating FROM users WHERE username = ?";
-    private static final String SQL_FIND_USER_BY_EMAIL_AND_PASSWORD = "SELECT userId, username, password, email, phone, averageRating FROM users WHERE email = ? AND password = ?";
-    private static final String SQL_FIND_USER_BY_ID = "SELECT userId, username, password, email, phone, averageRating FROM users WHERE userId = ?";
-    private static final String SQL_ADD_USER = "INSERT INTO users (userId, username, password, email, phone, averageRating) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE_USER_PASSWORD = "UPDATE users SET password = ? WHERE userId = ?";
-    private static final String SQL_FIND_ALL_USERS = "SELECT userId, username, password, email, phone, averageRating FROM users WHERE userId>? and userId<?";
-    private static final String SQL_FIND_USERS_BY_IDS = "SELECT userId, username, password, email, phone, averageRating FROM users WHERE user_id = ?";
-    private static final String SQL_AUTHORIZE = "SELECT userId, username, password, email, phone, averageRating FROM users WHERE username = ? AND password = ?";
-    private static final String SQL_ADD = "INSERT INTO users (email,login,password) VALUES (?,?,?)";
-    private static final String SQL_CHECK_BY_LOGIN = "SELECT password FROM users WHERE login = ?";
+    private static final String SQL_FIND_USER_BY_EMAIL = "SELECT userid, username, password, email, phone, averageRating FROM users WHERE email = ?";
+    private static final String SQL_FIND_USER_BY_USERNAME = "SELECT userid, username, password, email, phone, averageRating FROM users WHERE username = ?";
+    private static final String SQL_FIND_USER_BY_EMAIL_AND_PASSWORD = "SELECT userid, username, password, email, phone, averageRating FROM users WHERE email = ? AND password = ?";
+    private static final String SQL_FIND_USER_BY_ID = "SELECT userid, username, password, email, phone, averageRating FROM users WHERE userid = ?";
+    private static final String SQL_ADD_USER = "INSERT INTO users (userid, username, password, email, phone, averageRating) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE_USER_PASSWORD = "UPDATE users SET password = ? WHERE userid = ?";
+    private static final String SQL_FIND_ALL_USERS = "SELECT userid, username, password, email, phone, averageRating FROM users";
+    private static final String SQL_FIND_USERS_BY_IDS = "SELECT userid, username, password, email, phone, averageRating FROM users WHERE userid>? and userid<?";
+    private static final String SQL_AUTHORIZE = "SELECT userid, username, password, email, phone, averageRating FROM users WHERE username = ? AND password = ?";
+    private static final String SQL_ADD = "INSERT INTO users (email, username, password) VALUES (?,?,?)";
+    private static final String SQL_CHECK_BY_LOGIN = "SELECT password FROM users WHERE username = ?";
 
 //    private static final String BLOCK_USER = "UPDATE users SET enabled = false WHERE user_id = ?";
 //    private static final String UNBLOCK_USER = "UPDATE users SET enabled = true WHERE user_id = ?";
@@ -35,23 +36,23 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findByEmailAndPassword(String email, String password) throws DaoException {
         Optional<User> userOptional = Optional.empty();
-        try (Connection connection = ConnectionCreator.createConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_EMAIL_AND_PASSWORD)) {
-            preparedStatement.setString(1, email);
-            preparedStatement.setString(2, password);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                User user = new User();
-                user.setUserId(resultSet.getLong(2));
-                user.setUsername(resultSet.getString(1));
-                user.setPassword(resultSet.getString(3));
-                user.setEmail(resultSet.getString(4));
-                user.setPhone(resultSet.getString(5));
-                user.setAverageRating(resultSet.getDouble(6));
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_EMAIL_AND_PASSWORD)) {
+                preparedStatement.setString(1, email);
+                preparedStatement.setString(2, password);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    User user = new User();
+                    user.setUserId(resultSet.getLong(1));
+                    user.setUsername(resultSet.getString(2));
+                    user.setPassword(resultSet.getString(3));
+                    user.setEmail(resultSet.getString(4));
+                    user.setPhone(resultSet.getString(5));
+                    user.setAverageRating(resultSet.getDouble(6));
 //                user.setRole(Role.valueOf(resultSet.getString(5).toUpperCase()));
 //                user.setEnabled(resultSet.getBoolean(6));
-                userOptional = Optional.ofNullable(user);
-            }
+                    userOptional = Optional.ofNullable(user);
+                }
         } catch (SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -62,14 +63,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findByEmail(String email) throws DaoException {
         Optional<User> userOptional = Optional.empty();
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setUserId(resultSet.getLong(2));
-                user.setUsername(resultSet.getString(1));
+                user.setUserId(resultSet.getLong(1));
+                user.setUsername(resultSet.getString(2));
                 user.setPassword(resultSet.getString(3));
                 user.setEmail(resultSet.getString(4));
                 user.setPhone(resultSet.getString(5));
@@ -88,14 +89,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findByName(String name) throws DaoException {
         Optional<User> userOptional = Optional.empty();
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_USERNAME)) {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setUserId(resultSet.getLong(2));
-                user.setUsername(resultSet.getString(1));
+                user.setUserId(resultSet.getLong(1));
+                user.setUsername(resultSet.getString(2));
                 user.setPassword(resultSet.getString(3));
                 user.setEmail(resultSet.getString(4));
                 user.setPhone(resultSet.getString(5));
@@ -114,13 +115,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() throws DaoException {
         List<User> users = new ArrayList<>();
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_ALL_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setUserId(resultSet.getLong(2));
-                user.setUsername(resultSet.getString(1));
+                user.setUserId(resultSet.getLong(1));
+                user.setUsername(resultSet.getString(2));
                 user.setPassword(resultSet.getString(3));
                 user.setEmail(resultSet.getString(4));
                 user.setPhone(resultSet.getString(5));
@@ -139,14 +140,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findEntityById(Long id) throws DaoException {
         Optional<User> userOptional = Optional.empty();
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_ID)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setUserId(resultSet.getLong(2));
-                user.setUsername(resultSet.getString(1));
+                user.setUserId(resultSet.getLong(1));
+                user.setUsername(resultSet.getString(2));
                 user.setPassword(resultSet.getString(3));
                 user.setEmail(resultSet.getString(4));
                 user.setPhone(resultSet.getString(5));
@@ -164,15 +165,15 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findEntitiesByIds(Long id1, Long id2) throws DaoException {
         List<User> users = new ArrayList<>();
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USERS_BY_IDS)) {
             preparedStatement.setLong(1, id1);
             preparedStatement.setLong(2, id2);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setUserId(resultSet.getLong(2));
-                user.setUsername(resultSet.getString(1));
+                user.setUserId(resultSet.getLong(1));
+                user.setUsername(resultSet.getString(2));
                 user.setPassword(resultSet.getString(3));
                 user.setEmail(resultSet.getString(4));
                 user.setPhone(resultSet.getString(5));
@@ -190,7 +191,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean addUser(User user, String password) throws DaoException {
         boolean isAdd;
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_USER)) {
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.setString(1, user.getUsername());
@@ -211,7 +212,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean updateUserPassword(String password, Long userId) throws DaoException {
         boolean isUpdate;
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PASSWORD)) {
             preparedStatement.setString(1, password);
             preparedStatement.setLong(2, userId);
@@ -226,7 +227,7 @@ public class UserDaoImpl implements UserDao {
 //    @Override
 //    public boolean blockUser(List<Long> usersId) throws DaoException {
 //        boolean isUpdate;
-//        try (Connection connection = ConnectionCreator.createConnection();
+//        try (Connection connection = ConnectionPool.getInstance().getConnection();
 //             PreparedStatement preparedStatement = connection.prepareStatement(BLOCK_USER)){
 //            connection.setAutoCommit(false);
 //            for (Long userId : usersId) {
@@ -246,7 +247,7 @@ public class UserDaoImpl implements UserDao {
 //    @Override
 //    public boolean unblockUser(List<Long> usersId) throws DaoException {
 //        boolean isUpdate;
-//        try (Connection connection = ConnectionCreator.createConnection();
+//        try (Connection connection = ConnectionPool.getInstance().getConnection();
 //             PreparedStatement preparedStatement = connection.prepareStatement(UNBLOCK_USER)){
 //            connection.setAutoCommit(false);
 //            for (Long userId : usersId) {
@@ -277,15 +278,15 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> authorize(String login, String password) throws DaoException {
         Optional<User> userOptional = Optional.empty();
-        try (Connection connection = ConnectionCreator.createConnection();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(SQL_AUTHORIZE)) {
             statement.setString(1, login);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setUserId(resultSet.getLong(2));
-                user.setUsername(resultSet.getString(1));
+                user.setUserId(resultSet.getLong(1));
+                user.setUsername(resultSet.getString(2));
                 user.setPassword(resultSet.getString(3));
                 user.setEmail(resultSet.getString(4));
                 user.setPhone(resultSet.getString(5));
@@ -304,7 +305,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean save(String email, String login, String encPassword) throws DaoException {
         boolean isAdded;
-        try (Connection connection = ConnectionCreator.createConnection()) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement(SQL_ADD);
             statement.setString(1, email);
             statement.setString(2, login);
@@ -327,7 +328,7 @@ public class UserDaoImpl implements UserDao {
     }
     @Override
     public String checkByLogin(String login) throws DaoException {
-        try (Connection connection = ConnectionCreator.createConnection()) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement(SQL_CHECK_BY_LOGIN);
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();

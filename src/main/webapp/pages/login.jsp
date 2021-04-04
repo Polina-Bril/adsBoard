@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form name="loginForm" method="POST" action="main-controller">
+<form action="main-controller" method="get">
     <input type="hidden" name="command" value="login" />
     Login:<br/><input type="text" name="login" value=""/>
     <br/>Password:<br/><input type="password" name="password" value=""/>
@@ -14,7 +14,7 @@
     <br/>
     ${wrongAction}
     <br/>
-    ${nullPage}
+    ${errorMessage}
     <br/>
     <input type="submit" value="Log in"/>
 </form><hr/>

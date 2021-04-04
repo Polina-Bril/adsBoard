@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <title>SO List</title>
+</head>
+
+<body>
+<button id="somebutton2">press for list</button>
+<div id="somediv"></div>
+<script>
+    // Vanilla JS
+    document.querySelector('#somebutton2').addEventListener('click', () => {
+        fetch("ajax_servlet?button=2").then( res =>{
+            return res.json();
+        }).then(data => {
+            let block = document.querySelector('#somediv');
+            block.innerHTML = '';
+            let ulList = document.createElement('ul');
+            //          data = data.split(' ');
+            data.forEach(element => {
+                ulList.innerHTML += "Poli"+"<li>${element}</li>";
+            });
+            block.appendChild(ulList);
+        })
+    })
+</script>
+
+
+</body>
+</html>
