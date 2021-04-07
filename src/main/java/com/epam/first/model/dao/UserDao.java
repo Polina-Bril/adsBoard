@@ -1,6 +1,6 @@
-package com.epam.first.dao;
+package com.epam.first.model.dao;
 
-import com.epam.first.entity.User;
+import com.epam.first.model.entity.User;
 import com.epam.first.exception.DaoException;
 
 import java.util.List;

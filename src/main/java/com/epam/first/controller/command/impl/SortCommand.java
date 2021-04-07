@@ -1,10 +1,10 @@
-package com.epam.first.command.impl;
+package com.epam.first.controller.command.impl;
 
-import com.epam.first.command.ActionCommand;
-import com.epam.first.command.PagePath;
-import com.epam.first.entity.User;
+import com.epam.first.controller.command.ActionCommand;
+import com.epam.first.controller.command.PagePath;
+import com.epam.first.model.entity.User;
 import com.epam.first.exception.ServiceException;
-import com.epam.first.service.UserService;
+import com.epam.first.model.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

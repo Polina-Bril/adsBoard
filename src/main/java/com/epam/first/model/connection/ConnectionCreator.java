@@ -1,4 +1,4 @@
-package com.epam.first.connection;
+package com.epam.first.model.connection;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

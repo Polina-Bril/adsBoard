@@ -1,6 +1,4 @@
-package com.epam.first.command;
-
-import com.epam.first.exception.ServiceException;
+package com.epam.first.controller.command;
 
 import javax.servlet.http.HttpServletRequest;
 

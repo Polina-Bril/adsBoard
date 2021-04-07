@@ -1,4 +1,4 @@
-package com.epam.first.connection;
+package com.epam.first.model.connection;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +12,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionTimerTask extends TimerTask {
     private static final Logger logger = LogManager.getLogger(ConnectionTimerTask.class);
     private static final Lock lock = new ReentrantLock();
+    public static final int AFTER_HOUR = 3600000;
+    public static final int EVERY_HOUR = 3600000;
 
     @Override
     public void run() {

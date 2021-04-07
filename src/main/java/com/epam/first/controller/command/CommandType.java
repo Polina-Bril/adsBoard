@@ -1,8 +1,8 @@
-package com.epam.first.command;
+package com.epam.first.controller.command;
 
-import com.epam.first.command.impl.*;
-import com.epam.first.dao.impl.UserDaoImpl;
-import com.epam.first.service.impl.UserServiceImpl;
+import com.epam.first.controller.command.impl.*;
+import com.epam.first.model.dao.impl.UserDaoImpl;
+import com.epam.first.model.service.impl.UserServiceImpl;
 
 public enum CommandType {
     FIND_ALL_USERS {

@@ -1,4 +1,4 @@
-package com.epam.first.command;
+package com.epam.first.controller.command;
 
 public final class PagePath {
     public static final String START = "index.jsp";

@@ -1,4 +1,4 @@
-package com.epam.first.connection;
+package com.epam.first.model.connection;
 
 import com.epam.first.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +32,7 @@ public class ConnectionPool {
             freeConnection = new LinkedBlockingQueue<>(DEFAULT_POOL_SIZE);
             givenAwayConnection = new ArrayDeque<>();
             initializePool();
-            timerTask.schedule(new ConnectionTimerTask(), 3600000, 3600000); // через час и каждый час
+            timerTask.schedule(new ConnectionTimerTask(), ConnectionTimerTask.AFTER_HOUR, ConnectionTimerTask.EVERY_HOUR);
         }
 
         public static ConnectionPool getInstance() {
@@ -62,13 +62,12 @@ public class ConnectionPool {
             return proxyConnection;
         }
 
-        public void releaseConnection(Connection connection) throws DaoException {
+        public void releaseConnection(Connection connection) throws DaoException, InterruptedException {
             while (timeTaskIsWork.get()) {
                 waitingOneSecond();
             }
-            if (connection instanceof ProxyConnection) {
-                givenAwayConnection.remove(connection);
-                freeConnection.offer((ProxyConnection) connection);
+            if (connection instanceof ProxyConnection && givenAwayConnection.remove(connection)) {
+                freeConnection.put((ProxyConnection) connection);
             } else {
                 logger.error("Connection is not proxy or null!");
                 throw new DaoException("Invalid connection type passed");
@@ -97,7 +96,7 @@ public class ConnectionPool {
             });
         }
 
-        void initializePool() {
+        private void initializePool() {
             for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
                 try {
                     Connection connection = ConnectionCreator.createConnection();

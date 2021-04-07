@@ -1,10 +1,9 @@
-package com.epam.first.dao.impl;
+package com.epam.first.model.dao.impl;
 
-import com.epam.first.connection.ConnectionCreator;
-import com.epam.first.connection.ConnectionPool;
-import com.epam.first.entity.User;
+import com.epam.first.model.connection.ConnectionPool;
+import com.epam.first.model.entity.User;
 import com.epam.first.exception.DaoException;
-import com.epam.first.dao.UserDao;
+import com.epam.first.model.dao.UserDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

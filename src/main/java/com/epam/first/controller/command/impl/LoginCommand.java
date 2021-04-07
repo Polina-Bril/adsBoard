@@ -1,9 +1,9 @@
-package com.epam.first.command.impl;
+package com.epam.first.controller.command.impl;
 
-import com.epam.first.command.ActionCommand;
-import com.epam.first.entity.User;
+import com.epam.first.controller.command.ActionCommand;
+import com.epam.first.model.entity.User;
 import com.epam.first.exception.ServiceException;
-import com.epam.first.service.UserService;
+import com.epam.first.model.service.UserService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

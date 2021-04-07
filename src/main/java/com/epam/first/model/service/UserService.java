@@ -1,6 +1,6 @@
-package com.epam.first.service;
+package com.epam.first.model.service;
 
-import com.epam.first.entity.User;
+import com.epam.first.model.entity.User;
 import com.epam.first.exception.ServiceException;
 
 import java.util.List;

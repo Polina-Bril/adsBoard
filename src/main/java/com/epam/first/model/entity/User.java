@@ -1,4 +1,4 @@
-package com.epam.first.entity;
+package com.epam.first.model.entity;
 
 public class User {
     private long userId;

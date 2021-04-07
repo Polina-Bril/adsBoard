@@ -1,4 +1,4 @@
-package com.epam.first.connection;
+package com.epam.first.model.connection;
 
 import com.epam.first.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -62,7 +62,7 @@ public class ProxyConnection implements Connection {
         try {
             ConnectionPool.getInstance().releaseConnection(this);
         } catch (DaoException e) {
-            logger.error("Invalid connection type passed");
+            logger.error("Invalid connection type passed", e);
         }
     }
 

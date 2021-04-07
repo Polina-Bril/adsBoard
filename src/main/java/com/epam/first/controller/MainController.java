@@ -1,9 +1,10 @@
 package com.epam.first.controller;
 
-import com.epam.first.command.ActionCommand;
-import com.epam.first.command.ActionFactory;
-import com.epam.first.command.PagePath;
+import com.epam.first.controller.command.ActionCommand;
+import com.epam.first.controller.command.ActionFactory;
+import com.epam.first.controller.command.PagePath;
 import com.epam.first.exception.ServiceException;
+import com.epam.first.model.connection.ConnectionPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class MainController extends HttpServlet {
     public static Logger logger = LogManager.getLogger();
     private static final String ATTRIBUTE_NAME = "errorMessage";
+    private final ConnectionPool connectionPool
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         logger.log(Level.INFO, "from doGet method in controller");
@@ -54,5 +56,11 @@ public class MainController extends HttpServlet {
                     "no such command");
             response.sendRedirect(request.getContextPath() + page);
         }
+    }
+
+    @Override
+    public void destroy() {
+        connectionPool.destroyPool();
+        super.destroy();
     }
 }

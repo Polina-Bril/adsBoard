@@ -1,11 +1,11 @@
-package com.epam.first.service.impl;
+package com.epam.first.model.service.impl;
 
 import com.epam.first.comparator.UserIdComparator;
-import com.epam.first.entity.User;
+import com.epam.first.model.entity.User;
 import com.epam.first.exception.DaoException;
 import com.epam.first.exception.ServiceException;
-import com.epam.first.dao.UserDao;
-import com.epam.first.service.UserService;
+import com.epam.first.model.dao.UserDao;
+import com.epam.first.model.service.UserService;
 import com.epam.first.util.PasswordEncryptor;
 import com.epam.first.validator.UserValidator;
 import org.apache.logging.log4j.Level;

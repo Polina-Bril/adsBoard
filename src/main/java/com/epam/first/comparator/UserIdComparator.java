@@ -1,6 +1,6 @@
 package com.epam.first.comparator;
 
-import com.epam.first.entity.User;
+import com.epam.first.model.entity.User;
 
 import java.util.Comparator;
 
